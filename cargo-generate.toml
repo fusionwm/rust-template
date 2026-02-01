@@ -1,0 +1,6 @@
+[template]
+exclude = ["target"]
+
+[placeholders]
+description = { prompt = "Enter your description", default = "Fusion plugin", type = "string" }
+repository = { prompt = "Enter your repository", default = "https://github.com/yourusername/yourproject", type = "string" }
