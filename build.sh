@@ -26,7 +26,7 @@ for arg in "$@"; do
   fi
 done
 
-echo "Mode: $MODE"
+echo "Mode: $mode"
 
 if [[ ! -d "$tmp_dir" ]]; then
   echo "Cannot create temporary directory"
