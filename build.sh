@@ -2,7 +2,7 @@
 
 set -eu
 
-trap '[[ -d "$tmp_dir" ]] && rm -rf "$tmp_dir"' EXIT
+trap '[[ -d "$TEMP_DIR" ]] && rm -rf "$TEMP_DIR"' EXIT
 
 check_file() {
     local file=$1
@@ -12,32 +12,39 @@ check_file() {
     fi
 }
 
-mode="debug"
-cargo_flags=""
-root_dir=$(pwd)
-tmp_dir=$(mktemp -d -t fusion-plugin-XXXXXX)
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+
+ROOT_DIR=$(cd "$SCRIPT_DIR" && pwd)
+
+cd "$ROOT_DIR"
+
+echo "Working directory set to: $ROOT_DIR"
+
+MODE="debug"
+CARGO_FLAGS=""
+TEMP_DIR=$(mktemp -d -t fusion-plugin-XXXXXX)
 
 for arg in "$@"; do
   if [[ "$arg" == "--release" ]]; then
-    mode="release"
-    cargo_flags="--release"
+    MODE="release"
+    CARGO_FLAGS="--release"
   fi
 done
 
-wasm_path="$root_dir/target/wasm32-wasip2/$mode/{{crate_name}}.wasm"
+wasm_path="$ROOT_DIR/target/wasm32-wasip2/$MODE/{{crate_name}}.wasm"
 
-echo "Mode: $mode"
+echo "Mode: $MODE"
 
-if [[ ! -d "$tmp_dir" ]]; then
+if [[ ! -d "$TEMP_DIR" ]]; then
   echo "Cannot create temporary directory"
   exit 1
 fi
 
 check_file "manifest.toml"
-cp manifest.toml "$tmp_dir/manifest.toml"
+cp manifest.toml "$TEMP_DIR/manifest.toml"
 
 if [[ -d "config" ]]; then
-    cp -r "config" "$tmp_dir/"
+    cp -r "config" "$TEMP_DIR/"
 fi
 
 echo "Building WASM module..."
@@ -47,15 +54,15 @@ if ! grep -q "\[workspace\]" Cargo.toml; then
     printf "\n[workspace]\n" >> Cargo.toml
 fi
 
-cargo build --target wasm32-wasip2 $cargo_flags
+cargo build --target wasm32-wasip2 $CARGO_FLAGS
 
 check_file "$wasm_path"
-cp "$wasm_path" "$tmp_dir/module.wasm"
+cp "$wasm_path" "$TEMP_DIR/module.wasm"
 
 echo "Creating plugin bundle..."
 (
-    cd "$tmp_dir"
-    zip -qr "$root_dir/target/{{crate_name}}.fus" .
+    cd "$TEMP_DIR"
+    zip -qr "$ROOT_DIR/target/{{crate_name}}.fus" .
 )
 
 echo "Success! Output: ./target/{{crate_name}}.fus"
