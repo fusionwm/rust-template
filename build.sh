@@ -16,6 +16,18 @@ tmp_dir=$(mktemp -d -t fusion-plugin-XXXXXX)
 root_dir=$(pwd)
 wasm_path="$root_dir/target/wasm32-wasip2/release/name.wasm"
 
+mode="debug"
+cargo_flags=""
+
+for arg in "$@"; do
+  if [[ "$arg" == "--release" ]]; then
+    mode="release"
+    cargo_flags="--release"
+  fi
+done
+
+echo "Mode: $MODE"
+
 if [[ ! -d "$tmp_dir" ]]; then
   echo "Cannot create temporary directory"
   exit 1
@@ -35,7 +47,7 @@ if ! grep -q "\[workspace\]" Cargo.toml; then
     printf "\n[workspace]\n" >> Cargo.toml
 fi
 
-cargo build --target wasm32-wasip2 --release
+cargo build --target wasm32-wasip2 $cargo_flags
 
 check_file "$wasm_path"
 cp "$wasm_path" "$tmp_dir/module.wasm"

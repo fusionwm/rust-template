@@ -11,7 +11,7 @@ Install target:
 rustup target add wasm32-wasip2
 ```
 
-Build the plugin [release]:
+Build the plugin:
 ```bash
-./build.sh
+./build.sh [--release]
 ```
