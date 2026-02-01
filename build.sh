@@ -55,7 +55,7 @@ cp "$wasm_path" "$tmp_dir/module.wasm"
 echo "Creating plugin bundle..."
 (
     cd "$tmp_dir"
-    zip -qr "$root_dir/target/name.fus" .
+    zip -qr "$root_dir/target/{{crate_name}}.fus" .
 )
 
-echo "Success! Output: ./target/name.fus"
+echo "Success! Output: ./target/{{crate_name}}.fus"
