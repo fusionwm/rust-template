@@ -1,14 +1,19 @@
 # rust-template
 
 ### Usage
-Clone the repository:
+Install cargo generate:
 ```bash
-git clone https://github.com/fusionwm/rust-template.git
+cargo install cargo-generate
 ```
 
 Install target:
 ```bash
 rustup target add wasm32-wasip2
+```
+
+Create project from template:
+```bash
+cargo generate --git https://github.com/fusionwm/rust-template.git
 ```
 
 Build the plugin:
