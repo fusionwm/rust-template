@@ -12,12 +12,10 @@ check_file() {
     fi
 }
 
-tmp_dir=$(mktemp -d -t fusion-plugin-XXXXXX)
-root_dir=$(pwd)
-wasm_path="$root_dir/target/wasm32-wasip2/release/name.wasm"
-
 mode="debug"
 cargo_flags=""
+root_dir=$(pwd)
+tmp_dir=$(mktemp -d -t fusion-plugin-XXXXXX)
 
 for arg in "$@"; do
   if [[ "$arg" == "--release" ]]; then
@@ -25,6 +23,8 @@ for arg in "$@"; do
     cargo_flags="--release"
   fi
 done
+
+wasm_path="$root_dir/target/wasm32-wasip2/$mode/{{crate_name}}.wasm"
 
 echo "Mode: $mode"
 
