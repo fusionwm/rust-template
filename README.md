@@ -11,6 +11,11 @@ Install target:
 rustup target add wasm32-wasip2
 ```
 
+Install cargo fusion:
+```bash
+cargo install cargo-fusion
+```
+
 Create project from template:
 ```bash
 cargo generate --git https://github.com/fusionwm/rust-template.git
@@ -18,5 +23,6 @@ cargo generate --git https://github.com/fusionwm/rust-template.git
 
 Build the plugin:
 ```bash
-./build.sh [--release]
+cargo-fusion build
+# output: target/wasm32-wasip2/debug/#NAME.fsp
 ```
