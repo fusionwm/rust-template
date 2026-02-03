@@ -24,5 +24,5 @@ cargo generate --git https://github.com/fusionwm/rust-template.git
 Build the plugin:
 ```bash
 cargo-fusion build
-# output: target/wasm32-wasip2/debug/#NAME.fsp
+# output: target/plugins/#NAME.fsp
 ```
